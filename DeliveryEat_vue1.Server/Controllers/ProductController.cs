@@ -1,4 +1,4 @@
-﻿using DeliveryEat_vue1.Server.DataBase;
+﻿using DeliveryEat_vue1.Server.DataBase.Basket;
 using DeliveryEat_vue1.Server.DataBase.Contexts;
 using DeliveryEat_vue1.Server.Interfaces.DataCode;
 using Microsoft.AspNetCore.Authorization;
@@ -33,7 +33,7 @@ namespace DeliveryEat_vue1.Server.Controllers
         // POST: ProductController/Create
         [HttpPost]
         [Route("AddProduct")]
-        [Authorize]
+        
         public JsonResult AddProduct(string Title, string Preview, string Description, int Coast, string Visability)
         {
             Product product = new Product { Coast = Coast, Visability = Visability,Title=Title,Preview=Preview,Description=Description };

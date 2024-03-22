@@ -3,6 +3,7 @@ using System;
 
 namespace DeliveryEat_vue1.Server.DataBase
 {
+    
     public class Sdata
     {
         public string ID { get; set; }

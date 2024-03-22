@@ -46,7 +46,7 @@
 
                 <br />
                 <div class="medium-12">
-                    <button id="addBuy"@click="addBuy">Добавить в корзину</button>
+                    <button id="addBuy"@click="addBuy(item.id)">Добавить в корзину</button>
                 </div>
             </div>
         </div>
@@ -62,6 +62,37 @@
     import emitter from 'tiny-emitter/instance'
     import {ref} from 'vue'
     const API_URL = "https://localhost:7084/"
+    function getCookie(name) {
+        let matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+
+    }
+    function setCookie(name, value, attributes = {}) {
+
+        attributes = {
+            path: '/',
+            // add other defaults here if necessary
+            ...attributes
+        };
+
+        if (attributes.expires instanceof Date) {
+            attributes.expires = attributes.expires.toUTCString();
+        }
+
+        let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
+        for (let attributeKey in attributes) {
+            updatedCookie += "; " + attributeKey;
+            let attributeValue = attributes[attributeKey];
+            if (attributeValue !== true) {
+                updatedCookie += "=" + attributeValue;
+            }
+        }
+
+        document.cookie = updatedCookie;
+    }
    
     export default
         {
@@ -91,8 +122,29 @@
                     )
 
                 },
-                addBuy() {
-                    alert(test.value);
+                
+                addBuy(id) {
+                    const formData = new FormData();
+                    formData.append("Id", id);
+                    if (getCookie("session") == undefined) {
+                        axios.post(API_URL + "api/Basket/api/Add?products=" + id).then(
+                            (response) => {
+                                
+                                setCookie("session", response.data, { secure: true, 'max-age': 86300 });
+                            }
+                        )
+
+                    }
+                    else {
+                        axios.post(API_URL + "api/Basket/api/Add?products=" + id + "?sessionId=" + getCookie("session")).then(
+                            (response) => {
+                                if (response.data != getCookie("session")) {
+                                    setCookie("session", response.data, { secure: true, 'max-age': 86300 });
+                                }
+                               
+                            }
+                        )
+                    }
                 }
 
               

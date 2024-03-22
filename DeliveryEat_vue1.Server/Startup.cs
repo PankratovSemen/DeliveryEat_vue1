@@ -23,19 +23,14 @@ namespace DeliveryEat_vue1.Server
             // добавляем контекст ApplicationContext в качестве сервиса в приложение
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connection));
-            services.AddDbContext<UserContext>(options =>
+            services.AddDbContext<UserContext>(options => 
            options.UseSqlServer(connection));
             services.AddMvc(); 
             services.AddControllers();
             services.AddSwaggerGen();
             services.AddEndpointsApiExplorer();
             services.AddDistributedMemoryCache();
-            services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromSeconds(5);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-            });
+           
            
 
         }
@@ -58,7 +53,7 @@ namespace DeliveryEat_vue1.Server
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            app.UseSession();
+           
             app.UseHttpsRedirection();
 
             
