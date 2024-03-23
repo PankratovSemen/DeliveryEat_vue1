@@ -2,7 +2,7 @@
     import { defineEmits, reactive } from 'vue'
     const emit = defineEmits(['change-count'])
     const counts = reactive({
-        value:0
+        value:1
     })
 
     function plus() {
@@ -11,7 +11,7 @@
     }
 
     function minus() {
-        if (counts.value <= 0) {
+        if (counts.value < 1) {
             counts.value = 1;
         }
         counts.value--;

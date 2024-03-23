@@ -1,18 +1,21 @@
-<!--<script setup>
+<script setup>
+    /**
+  * теперь этот файл/поток будет кодироваться в UTF-8
+  */
     import { ref } from 'vue'
-    
+    import Counter from './child/Counter.vue'
+    import Basket from './child/Basket.vue'
     const test = ref('change-count')
 
     const callback = data => test.value = data
-    function addBuy(id) 
-    {
+    function addBuy(id) {
         alert(test.value);
         const formData = new FormData();
         formData.append("Id", id);
         if (getCookie("session") == undefined) {
             axios.post(API_URL + "api/Basket/api/Add?products=" + id + "&count=" + test.value).then(
                 (response) => {
-                
+
                     setCookie("session", response.data, { secure: true, 'max-age': 86300 });
                     alert(response.data)
                 }
@@ -25,40 +28,52 @@
                     if (response.data != getCookie("session")) {
                         setCookie("session", response.data, { secure: true, 'max-age': 86300 });
                     }
-               
+
                 }
             )
             alert("Ok");
         }
     }
-    
-    
-</script>-->
+
+
+</script>
 
 <template>
-    
-    
-    <header class="grid-x grid-padding-x">
+   
+    <div class="grid-x grid-padding-x">
+        <div class="cell medium-4 large-3" id="item1" v-for="(item,id) in item" :key="item.id">
 
-        <div class="large-6 cell">
-            <div class="title-bar-left">
-                <img src="../img/Menu.png" class="menu">
+            <img src="../img/1.jpg" alt="Упс изображение не загрузилось" class="cardimage">
+            <div class="small-12">
+                <h1>{{item.title}}</h1>
+                <p>{{content.DescriptionLabel}}</p>
+                <p>{{item.description}}</p>
             </div>
+            <div class="grid-x">
+                <br />
+                <div class="small-12" id="countstitle">{{content.CountLabel}}</div>
+                <br />
+                <br />
+                <Counter @change-count="callback" />
 
 
+                <br />
+                <div class="medium-12">
+                    <button id="addBuy" @click="addBuy(item.id)">{{content.addBuyRU}}</button>
+                </div>
+            </div>
         </div>
-        <Basket/>
-    </header>
-    <router-view lang="ru" ></router-view>
 
-    
+
+
+    </div>
+
 </template>
 
 <script>
-    
+
     import emitter from 'tiny-emitter/instance'
     import { ref } from 'vue'
-    import Basket from './components/child/Basket.vue'
     const API_URL = "https://localhost:7084/"
     function getCookie(name) {
         let matches = document.cookie.match(new RegExp(
@@ -91,25 +106,64 @@
 
         document.cookie = updatedCookie;
     }
-   
+    const routes = [{ path: '/counter', component: Counter }]
     export default
         {
             components: {
-               
+                Counter,
                 Basket
             },
-       
-            
+            data() {
+                return {
 
-            
+                    item: [],
+                    content: {
+                        addBuyRU:'Добавить в корзину',
+                        DescriptionLabel:'Описание',
+                        CountLabel:'Количествоss',
+                    }
 
-            
-    }
+
+                }
+            },
+
+
+            methods: {
+                async refreshData() {
+                    axios.get(API_URL + "api/Product").then(
+                        (response) => {
+                            const data = response.data;
+                            this.item = data;
+                            
+
+                        }
+                    )
+
+                },
+
+
+
+
+
+
+
+            },
+
+            created() {
+                this.refreshData();
+                this.timer = setInterval(this.refreshData, 10000);
+            },
+            mounted: function () {
+                this.refreshData();
+
+
+            },
+
+
+        }
 
 
 
 
 
 </script>
-
-

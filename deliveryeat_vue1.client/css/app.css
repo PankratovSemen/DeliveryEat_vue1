@@ -92,3 +92,27 @@ header{
 
     
 }
+
+
+
+.badge {
+    position:absolute;
+    font-size: 14px;
+    top: 5px;
+}
+
+
+.notification{
+    padding:30px;
+    
+   
+}
+
+
+#basket{
+    padding-right:10px;
+}
+
+#countstitle{
+    text-align:left;
+}
