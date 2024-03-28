@@ -35,13 +35,18 @@ namespace DeliveryEat_vue1.Server.Controllers
                     return Json("");
                 List<Product> products = new List<Product>();
 
-                var basketItem = _context.BasketItem.Where(x => x.BasketId == list).ToList();
+                var basketItem = _context.BasketItem.GroupBy(d => new { d.ProductId, d.BasketId })
+                 .Where(g => g.Count() > 1 || g.Count() == 1).Select(g => new { g.Key.ProductId, g.Key.BasketId }).Where(x => x.BasketId == list).ToList();
 
                 foreach (var t in basketItem)
                 {
 
                     var p = _context.Product.Where(x => x.Id == t.ProductId).FirstOrDefault();
-                    products.Add(p);
+                    if (!products.Contains(p))
+                    {
+                        products.Add(p);
+                    }
+                    
                 }
                 //foreach(var item in list)
                 //{
@@ -93,7 +98,7 @@ namespace DeliveryEat_vue1.Server.Controllers
                         ProductId = Pid,
                         BasketId = id,
                     };
-                    if (count != null)
+                    if (count > 0)
                     {
                         for (int i = 0; i < count; i++)
                         {

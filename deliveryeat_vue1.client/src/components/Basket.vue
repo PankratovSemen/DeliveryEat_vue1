@@ -5,6 +5,7 @@
     import { ref } from 'vue'
     import Counter from './child/Counter.vue'
     import Basket from './child/Basket.vue'
+    import CountPR from './child/CountProduct.vue'
     const test = ref('change-count')
 
     const callback = data => test.value = data
@@ -51,7 +52,7 @@
             </div>
             <div class="grid-x">
                 <br />
-                <div class="small-12" id="countstitle">{{content.CountLabel}}</div>
+                <div class="small-12" id="countstitle">{{content.CountLabel}} <CountPR :id="item.id"/></div>
                 <br />
                 <br />
                 
@@ -109,7 +110,8 @@
         {
             components: {
                 Counter,
-                Basket
+                Basket,
+                CountPR
             },
             data() {
                 return {
@@ -119,7 +121,8 @@
                         addBuyRU:'Добавить в корзину',
                         DescriptionLabel:'Описание',
                         CountLabel:'Количество',
-                    }
+                    },
+                    countProduct:0
 
 
                 }
@@ -138,6 +141,16 @@
                     )
 
                 },
+                async getCount(id) {
+                    axios.get(API_URL + "api/Basket/api/GetCountProduct?session=" + getCookie("session")  +"&product="+id).then(
+                        (response) => {
+                            const data = response.data;
+                            this.countProduct = data;
+                            return data;
+
+                        }
+                    )
+                }
 
 
 
