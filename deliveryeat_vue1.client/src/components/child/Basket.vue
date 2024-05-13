@@ -65,14 +65,16 @@
 
             methods: {
                 async refreshData() {
-                    axios.get(API_URL + "api/Basket/api/GetCount?session="+getCookie("session")).then(
-                        (response) => {
-                            const data = response.data;
-                            this.count = data;
+                    if (getCookie("session") != undefined) {
+                        axios.get(API_URL + "api/Basket/api/GetCount?session=" + getCookie("session")).then(
+                            (response) => {
+                                const data = response.data;
+                                this.count = data;
 
 
-                        }
-                    )
+                            }
+                        )
+                    }
 
                 },
 

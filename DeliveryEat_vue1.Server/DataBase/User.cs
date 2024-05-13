@@ -11,5 +11,6 @@ namespace DeliveryEat_vue1.Server.DataBase
         public string Email { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+        public string? Phone { get; set; }
     }
 }

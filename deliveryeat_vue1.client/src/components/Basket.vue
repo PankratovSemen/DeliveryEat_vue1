@@ -44,7 +44,7 @@
     <div class="grid-x grid-padding-x">
         <div class="cell medium-8 large-8" id="item1" v-for="(item,id) in item" :key="item.id">
 
-            <img src="../img/1.jpg" alt="Упс изображение не загрузилось" class="cardimage">
+            <img :src="item.preview" alt="Упс изображение не загрузилось" class="cardimage">
             <div class="small-12">
                 <h1>{{item.title}}</h1>
                 <p>{{content.DescriptionLabel}}</p>

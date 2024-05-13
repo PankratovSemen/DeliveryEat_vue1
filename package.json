@@ -1,5 +1,11 @@
 {
   "devDependencies": {
     "dotenv-webpack": "^8.1.0"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "foundation-sites": "^6.8.1",
+    "vuelidate": "^0.7.7",
+    "vuex": "^4.0.2"
   }
 }

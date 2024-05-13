@@ -1,0 +1,12 @@
+﻿namespace DeliveryEat_vue1.Server.DataBase
+{
+    public class Guest
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string MiddleName { get; set; }
+        public string Email {  get; set; }
+        public string Phone { get; set; }
+    }
+}

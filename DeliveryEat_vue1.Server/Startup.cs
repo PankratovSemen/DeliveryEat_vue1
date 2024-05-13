@@ -4,7 +4,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using DeliveryEat_vue1.Server.Model;
 using System;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Serialization;
 
 namespace DeliveryEat_vue1.Server
 {
@@ -23,15 +27,40 @@ namespace DeliveryEat_vue1.Server
             // добавляем контекст ApplicationContext в качестве сервиса в приложение
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connection));
-            services.AddDbContext<UserContext>(options => 
-           options.UseSqlServer(connection));
+            
             services.AddMvc(); 
             services.AddControllers();
             services.AddSwaggerGen();
             services.AddEndpointsApiExplorer();
             services.AddDistributedMemoryCache();
-           
-           
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                   .AddJwtBearer(options =>
+                   {
+                       options.RequireHttpsMetadata = false;
+                       options.TokenValidationParameters = new TokenValidationParameters
+                       {
+                           // óêçûâàåò, áóäåò ëè âàëèäèðîâàòüñÿ èçäàòåëü ïðè âàëèäàöèè òîêåíà
+                           ValidateIssuer = true,
+                           // ñòðîêà, ïðåäñòàâëÿþùàÿ èçäàòåëÿ
+                           ValidIssuer = AuthOptions.ISSUER,
+
+                           // áóäåò ëè âàëèäèðîâàòüñÿ ïîòðåáèòåëü òîêåíà
+                           ValidateAudience = true,
+                           // óñòàíîâêà ïîòðåáèòåëÿ òîêåíà
+                           ValidAudience = AuthOptions.AUDIENCE,
+                           // áóäåò ëè âàëèäèðîâàòüñÿ âðåìÿ ñóùåñòâîâàíèÿ
+                           ValidateLifetime = true,
+
+                           // óñòàíîâêà êëþ÷à áåçîïàñíîñòè
+                           IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                           // âàëèäàöèÿ êëþ÷à áåçîïàñíîñòè
+                           ValidateIssuerSigningKey = true,
+                       };
+                   });
+
+            
+
+
 
         }
         public void Configure(WebApplication app, IWebHostEnvironment env)

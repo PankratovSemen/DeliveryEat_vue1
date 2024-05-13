@@ -19,7 +19,7 @@ export default{
 
     props: {
         id: Number,
-        user: String
+        baskets: String
     },
     data(){
 
@@ -29,10 +29,10 @@ export default{
         }
     },
     methods:{
-        getCount(id,user){
+        getCount(id,baskets){
 
 
-            axios.get(API_URL + "api/Basket/api/GetCountProduct?username=" + user  +"&product="+id).then(
+            axios.get(API_URL + "api/Basket/api/GetCountProduct?basketid=" + baskets  +"&product="+id).then(
                 (response) => {
                     const data = response.data;
                     this.count = data;
@@ -47,7 +47,7 @@ export default{
 
     },
     mounted: function () {
-        this.getCount(this.id,this.user);
+        this.getCount(this.id,this.baskets);
 
 
     },
