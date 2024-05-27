@@ -40,7 +40,13 @@
 </script>
 
 <template>
-    
+    <div class="grid-container" v-if="item.length==0">
+        <div class="grid-x">
+            <div  class="medium-12 align-center">
+                <p>Вы пока что ничего не купили корзина пустая</p>
+            </div>
+        </div>
+    </div>
     <div class="grid-x grid-padding-x">
         <div class="cell medium-8 large-8" id="item1" v-for="(item,id) in item" :key="item.id">
 
@@ -131,25 +137,30 @@
 
             methods: {
                 async refreshData() {
-                    axios.get(API_URL + "api/Basket/api/GetBasket?session=" + getCookie("session")).then(
-                        (response) => {
-                            const data = response.data;
-                            this.item = data;
+                    if (getCookie("session") != undefined) {
+                        axios.get(API_URL + "api/Basket/api/GetBasket?session=" + getCookie("session")).then(
+                            (response) => {
+                                const data = response.data;
+                                this.item = data;
 
 
-                        }
-                    )
+                            }
+                        )
+                    }
+
 
                 },
                 async getCount(id) {
-                    axios.get(API_URL + "api/Basket/api/GetCountProduct?session=" + getCookie("session")  +"&product="+id).then(
-                        (response) => {
-                            const data = response.data;
-                            this.countProduct = data;
-                            return data;
+                    if (getCookie("session") != undefined) {
+                        axios.get(API_URL + "api/Basket/api/GetCountProduct?session=" + getCookie("session") + "&product=" + id).then(
+                            (response) => {
+                                const data = response.data;
+                                this.countProduct = data;
+                                return data;
 
-                        }
-                    )
+                            }
+                        )
+                    }
                 }
 
 

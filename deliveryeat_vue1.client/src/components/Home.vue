@@ -8,29 +8,55 @@
     const test = ref('change-count')
 
     const callback = data => test.value = data
-    function addBuy(id) {
+    function addBuy(id, username) {
         alert(test.value);
+        if(test.value=='change-count'){
+            test.value = 1;
+        }
         const formData = new FormData();
         formData.append("Id", id);
         if (getCookie("session") == undefined) {
-            axios.post(API_URL + "api/Basket/api/Add?products=" + id + "&count=" + test.value).then(
-                (response) => {
+            if(username==undefined){
+                axios.post(API_URL + "api/Basket/api/Add?products=" + id + "&count=" + test.value).then(
+                    (response) => {
 
-                    setCookie("session", response.data, { secure: true, 'max-age': 86300 });
-                    alert(response.data)
-                }
-            )
+                        setCookie("session", response.data, { secure: true, 'max-age': 86300 });
+                        alert(response.data)
+                    }
+                )
+            }
+            else {
+                axios.post(API_URL + "api/Basket/api/Add?products=" + id + "&count=" + test.value + '&username=' + username).then(
+                    (response) => {
+
+
+                        alert(response.data)
+                    }
+                )
+            }
+
 
         }
-        else if (getCookie("session") != undefined) {
-            axios.post(API_URL + "api/Basket/api/Add?products=" + id + "&sessionId=" + getCookie("session") + "&count=" + test.value).then(
-                (response) => {
-                    if (response.data != getCookie("session")) {
-                        setCookie("session", response.data, { secure: true, 'max-age': 86300 });
-                    }
+        else if (getCookie("session").length >0) {
+            if(username==undefined){
+                axios.post(API_URL + "api/Basket/api/Add?products=" + id + "&sessionId=" + getCookie("session") + "&count=" + test.value).then(
+                    (response) => {
+                        if (response.data != getCookie("session")) {
+                            setCookie("session", response.data, { secure: true, 'max-age': 86300 });
+                        }
 
-                }
-            )
+                    }
+                )
+            }
+            else {
+                axios.post(API_URL + "api/Basket/api/Add?products=" + id + "&count=" + test.value + '&username=' + username).then(
+                    (response) => {
+
+
+                        alert(response.data)
+                    }
+                )
+            }
             alert("Ok");
         }
     }
@@ -59,7 +85,7 @@
 
                 <br />
                 <div class="medium-12">
-                    <button id="addBuy" @click="addBuy(item.id)">{{content.addBuyRU}}</button>
+                    <button id="addBuy" @click="addBuy(item.id,gettersAuthData.userName)">{{content.addBuyRU}}</button>
                 </div>
             </div>
         </div>
@@ -74,6 +100,7 @@
 
     import emitter from 'tiny-emitter/instance'
     import { ref } from 'vue'
+    import {mapGetters} from "vuex";
 
     const API_URL = "https://localhost:7084/"
     function getCookie(name) {
@@ -129,6 +156,10 @@
 
                 }
             },
+            computed: {
+                ...mapGetters('auth', {
+                    gettersAuthData: 'getAuthData'
+                })},
 
 
             methods: {
