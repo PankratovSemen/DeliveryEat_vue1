@@ -8,7 +8,9 @@
 </template>
 
 <script>
- const API_URL = "https://localhost:7084/";
+ import axios from "axios";
+
+ const API_URL = "http://localhost:5000/";
   function getCookie(name) {
     let matches = document.cookie.match(new RegExp(
         "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"

@@ -6,7 +6,7 @@ const state = () => ({
         token: "",
         tokenExp:"",
         role: "",
-        userName: "ыыв",
+        userName: "",
     },
     loginStatus:"failed",
 });
@@ -31,7 +31,7 @@ const getters = {
 const actions = {
     async login({commit},username) {
         const response = await axios
-            .post("https://localhost:7084/Login?login=" + username[0] + "&password="+username[1])
+            .post("http://localhost:5000/Login?login=" + username[0] + "&password="+username[1])
             .catch((err) => {
                 console.log(err);
             });

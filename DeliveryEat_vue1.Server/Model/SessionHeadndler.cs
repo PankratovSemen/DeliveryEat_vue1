@@ -37,7 +37,8 @@ namespace DeliveryEat_vue1.Server.Model
 
         public  async Task<List<Sdata>> GetSession(string session)
         {
-            return await context.Sessions.Where(x=>x.ID==session && x.dateEnd>=DateTime.Now).ToListAsync();
+            if (context.Sessions.Any(x => x.ID == session && x.dateEnd >= DateTime.Now)) { return await context.Sessions.Where(x => x.ID == session && x.dateEnd >= DateTime.Now).ToListAsync(); }
+            return null;
           
         }
     }

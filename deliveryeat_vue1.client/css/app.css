@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-header{
+.topbar {
     background: linear-gradient(to right, #c99e10, #cb3f2a);
     min-height: 80px;
     max-height: 100px;

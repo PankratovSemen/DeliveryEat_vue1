@@ -57,7 +57,7 @@ import router from "@/router.js";
 import {useVuelidate} from '@vuelidate/core'
 import {minLength, required} from '@vuelidate/validators'
 
-const API_URL = "https://localhost:7084/";
+const API_URL = "http://localhost:5000/";
 export default {
     name: "PayOrderUser",
     setup () {

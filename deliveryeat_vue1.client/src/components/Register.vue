@@ -1,6 +1,6 @@
 <template>
 
-        <form>
+
             <div class="grid-container">
                 <div class="grid-x">
                 <div class="medium-6 cell">
@@ -38,7 +38,7 @@
                 <button class="button" @click="submit">Отправить</button>
                 </div>
             </div>
-        </form>
+
 
 </template>
 
@@ -46,7 +46,7 @@
 import axios from "axios";
 import router from "@/router.js";
 
-const API_URL = "https://localhost:7084/";
+const API_URL = "http://localhost:5000/";
 export default {
     name: "Register",
     data(){
@@ -61,9 +61,9 @@ export default {
         }
     },
     methods:{
-        submit(){
-            axios.post(API_URL + 'Account/Register?surname='+ this.surname + '&name='+this.name + '&middlename='+this.middlename + '&login='+this.login + '&password='+ this.password + '&role=' + this.role + '&Email='+ this.Email);
-            router.push({path:'/login'})
+       async submit(){
+            await axios.post(API_URL + 'Register?surname=' + this.surname + '&name=' + this.name + '&middlename=' + this.middlename + '&login=' + this.login + '&password=' + this.password + '&role=' + 'Пользователь' + '&Email=' + this.Email);
+            router.push({path:'/Login'})
         }
     }
 }

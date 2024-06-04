@@ -5,10 +5,11 @@
     import { ref } from 'vue'
     import Counter from './child/Counter.vue'
     import Basket from './child/Basket.vue'
+    import axios from "axios";
     const test = ref('change-count')
 
     const callback = data => test.value = data
-    function addBuy(id, username) {
+    function addBuySession(id) {
         alert(test.value);
         if(test.value=='change-count'){
             test.value = 1;
@@ -16,29 +17,21 @@
         const formData = new FormData();
         formData.append("Id", id);
         if (getCookie("session") == undefined) {
-            if(username==undefined){
-                axios.post(API_URL + "api/Basket/api/Add?products=" + id + "&count=" + test.value).then(
-                    (response) => {
 
-                        setCookie("session", response.data, { secure: true, 'max-age': 86300 });
-                        alert(response.data)
-                    }
-                )
-            }
-            else {
-                axios.post(API_URL + "api/Basket/api/Add?products=" + id + "&count=" + test.value + '&username=' + username).then(
-                    (response) => {
+            axios.post(API_URL + "api/Basket/api/Add?products=" + id + "&count=" + test.value).then(
+                (response) => {
+
+                    setCookie("session", response.data, {secure: true, 'max-age': 86300});
+                    alert(response.data + 'not cocke');
+                }
+            )
 
 
-                        alert(response.data)
-                    }
-                )
-            }
 
 
         }
         else if (getCookie("session").length >0) {
-            if(username==undefined){
+
                 axios.post(API_URL + "api/Basket/api/Add?products=" + id + "&sessionId=" + getCookie("session") + "&count=" + test.value).then(
                     (response) => {
                         if (response.data != getCookie("session")) {
@@ -46,20 +39,19 @@
                         }
 
                     }
-                )
-            }
-            else {
-                axios.post(API_URL + "api/Basket/api/Add?products=" + id + "&count=" + test.value + '&username=' + username).then(
-                    (response) => {
+                )}
 
 
-                        alert(response.data)
-                    }
-                )
-            }
-            alert("Ok");
         }
-    }
+function addBuyUser(id,user){
+    axios.post(API_URL + "api/Basket/api/Add?products=" + id + "&count=" + test.value + '&username=' + user).then(
+        (response) => {
+
+
+            alert(response.data)
+        }
+    )
+}
 
 
 </script>
@@ -72,6 +64,7 @@
             <img :src="item.preview" alt="Упс изображение не загрузилось" class="cardimage">
             <div class="small-12">
                 <h1>{{item.title}}</h1>
+                <p>Цена:{{item.coast}} РУБ</p>
                 <p>{{content.DescriptionLabel}}</p>
                 <p>{{item.description}}</p>
             </div>
@@ -84,8 +77,10 @@
 
 
                 <br />
+
                 <div class="medium-12">
-                    <button id="addBuy" @click="addBuy(item.id,gettersAuthData.userName)">{{content.addBuyRU}}</button>
+                    <button id="addBuy" v-if="!isAuth" @click="addBuySession(item.id)">{{content.addBuyRU}}</button>
+                    <button id="addBuy" v-if="isAuth" @click="addBuyUser(item.id,gettersAuthData.userName)">{{content.addBuyRU}}</button>
                 </div>
             </div>
         </div>
@@ -93,22 +88,26 @@
 
 
     </div>
-
+{{isAuth}}
 </template>
 
 <script>
 
     import emitter from 'tiny-emitter/instance'
     import { ref } from 'vue'
-    import {mapGetters} from "vuex";
-
-    const API_URL = "https://localhost:7084/"
+    import {mapGetters} from 'vuex';
+    import {getnamepi} from '@/apioptions/index.js'
+    import axios from "axios";
+    const API_URL = "http://localhost:5000/"
     function getCookie(name) {
         let matches = document.cookie.match(new RegExp(
             "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
         ));
         return matches ? decodeURIComponent(matches[1]) : undefined;
 
+    }
+    function getap(){
+        return getnamepi()
     }
     function setCookie(name, value, attributes = {}) {
 
@@ -139,7 +138,7 @@
         {
             components: {
                 Counter,
-                Basket,
+
 
 
             },
@@ -151,7 +150,8 @@
                         addBuyRU:'Добавить в корзину',
                         DescriptionLabel:'Описание',
                         CountLabel:'Количество',
-                    }
+                    },
+                    isAuth:false,
 
 
                 }
@@ -176,6 +176,14 @@
                 },
 
 
+                async authget(){
+                    if(this.gettersAuthData.userName==""){
+                        this.isAuth=false;
+                    }
+                    else if(this.gettersAuthData.userName!=""){
+                        this.isAuth=true;
+                    }
+                },
 
 
 
@@ -189,7 +197,7 @@
             },
             mounted: function () {
                 this.refreshData();
-
+                this.authget();
 
             },
 

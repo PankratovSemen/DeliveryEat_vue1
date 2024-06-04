@@ -38,7 +38,7 @@
 <template>
     
     
-    <header class="grid-x grid-padding-x">
+    <div class="grid-x grid-padding-x topbar">
 
         <div class="large-6 cell">
             <div class="title-bar-left">
@@ -48,9 +48,9 @@
 
         </div>
         <Basket/>
-    </header>
+    </div>
    <div class="grid-x" v-if="isVisible">
-       <div class="right-menu medium-5">
+       <div class="right-menu cell medium-5">
            <div class="grid-y">
                <div class="link">
                    <router-link to="/" exact>Главная</router-link>
@@ -64,6 +64,10 @@
 
                    <div v-if="gettersAuthData.role=='Администратор' || gettersAuthData.role=='Менеджер' || gettersAuthData.role=='Кухонный работник'">
                        <router-link to="/orderPanel" exact>Заказы </router-link>
+                       <br>
+                       <router-link to="/Users/Create" exact>Создать пользователя </router-link>
+                       <br>
+                       <router-link to="/Products/Add" exact>Добавить продукт </router-link>
                    </div>
                    <div v-if="gettersAuthData.role=='Курьер'">
                        <router-link to="/Courier" exact>Мои доставки </router-link>
@@ -72,6 +76,10 @@
            </div>
        </div>
    </div>
+    <br>
+    <br>
+    <br>
+    <br>
     <router-view lang="ru" ></router-view>
 
     
@@ -83,7 +91,7 @@
     import { ref } from 'vue'
     import Basket from './components/child/Basket.vue'
     import {mapGetters} from "vuex";
-    const API_URL = "https://localhost:7084/"
+    const API_URL = "https://localhost:5000/"
     function getCookie(name) {
         let matches = document.cookie.match(new RegExp(
             "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
@@ -119,7 +127,7 @@
     export default
         {
             components: {
-               
+
                 Basket
             },
             data(){
@@ -160,13 +168,22 @@
 #offCanvas{
     visibility: visible;
 }
+    .topbar {
+        position: fixed;
+        width: 100%;
+        z-index: 9999;
+    }
 
-.right-menu{
-    background-color: #0a53be;
-
-    height: 100vh;
-
-}
+    .right-menu {
+        background-color: #817878;
+        margin-top:80px;
+        position: fixed;
+        display: block;
+        height: 100%;
+        min-height:300px;
+        max-height:1000px;
+        z-index: 100;
+    }
 router-link{
     font-size:20px;
     color:white

@@ -16,7 +16,8 @@
             <input v-model="password">
             <br>
             <br>
-            <p  @click="login" class="button">Войти</p>
+            <p  @click="login" class="register-btn">Войти</p>
+            <p  @click="register" class="register-btn">Регистрация</p>
 
         </form>
         </div>
@@ -29,6 +30,7 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import router from "@/router.js";
 
 export default {
 
@@ -57,6 +59,9 @@ export default {
             }else{
                 alert('failed to login')
             }
+        },
+        register(){
+            router.push("/Register")
         }
     }
 
@@ -85,7 +90,18 @@ export default {
     font-family: Arial;
 
 }
-
+@font-face {
+    font-family: "PF Centro Sans Pro XThin";
+    src:url("./c");
+}
+.register-btn{
+    border-radius: 20px;
+    background-color: #0a53be;
+    text-align:center;
+    color:white;
+    font-size:25px;
+   font-family: "Segoe UI Black";
+}
 input{
     width: 100%;
     border:none;

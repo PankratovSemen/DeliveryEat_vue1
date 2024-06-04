@@ -1,10 +1,87 @@
 <template>
-$END$
+
+
+    <div class="grid-container">
+        <div class="grid-x">
+            <div class="medium-6 cell">
+                <label>Фамилия
+                    <input type="text" v-model="surname">
+                </label>
+            </div>
+
+            <div class="medium-6 cell">
+                <label>Имя
+                    <input type="text" v-model="name">
+                </label>
+            </div>
+            <div class="medium-6 cell">
+                <label>Отчество
+                    <input type="text" v-model="middlename">
+                </label>
+            </div>
+            <div class="medium-6 cell">
+                <label>Логин
+                    <input type="text" v-model="login">
+                </label>
+            </div>
+            <div class="medium-6 cell">
+                <label>Пароль
+                    <input type="password" v-model="password">
+                </label>
+            </div>
+            <div class="medium-6 cell">
+                <label>Email
+                    <input type="text" v-model="Email">
+                </label>
+            </div>
+            <div class="medium-6 cell">
+                <label>Роль
+                    <select class="form-select" aria-label="Default select example" v-model="role">
+                        <option selected>Выберите роль</option>
+                        <option value="Пользователь">Пользователь</option>
+                        <option value="Администратор">Администратор</option>
+                        <option value="Менеджер">Менеджер</option>
+                    </select>
+                </label>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="grid-container">
+        <div class="grid-x">
+            <div class="cell medium-12">
+                <button class="button" @click="submit">Отправить</button>
+            </div>
+        </div>
+    </div>
+
 </template>
 
 <script>
+import axios from "axios";
+import router from "@/router.js";
+
+const API_URL = "http://localhost:5000/";
 export default {
-name: "CreateUser"
+    name: "Register",
+    data(){
+        return{
+            surname:'',
+            name:'',
+            middlename:'',
+            login:'',
+            password:'',
+            role:'Пользователь',
+            Email:'',
+        }
+    },
+    methods:{
+        async submit(){
+            await axios.post(API_URL + 'Register?surname=' + this.surname + '&name=' + this.name + '&middlename=' + this.middlename + '&login=' + this.login + '&password=' + this.password + '&role=' + this.role + '&Email=' + this.Email);
+            router.push({path:'/Login'})
+        }
+    }
 }
 </script>
 

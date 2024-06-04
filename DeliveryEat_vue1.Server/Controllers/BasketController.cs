@@ -387,20 +387,24 @@ namespace DeliveryEat_vue1.Server.Controllers
         {
             try
             {
+                _logger.LogError("ST");
                 SessionHeadndler headndler = new(_context);
                 int id = 0;
                 if (session != null)
                 {
-                    id = Convert.ToInt32(headndler.GetSession(session).Result.Where(x => x.Name == "basket").LastOrDefault().Value);
+                    id = Convert.ToInt32(headndler.GetSession(session).Result.LastOrDefault(x => x.Name == "basket").Value);
 
                 }
+                _logger.LogError(id.ToString());
                 List<Product> products = new List<Product>();
                 var item = _context.BasketItem.GroupBy(d => new { d.ProductId, d.BasketId })
                  .Where(g => g.Count() > 1).Select(g => new { g.Key.ProductId, g.Key.BasketId }).Where(x => x.BasketId == id);
                 List<int> Totals = new();
                 int CoastTotal = 0;
+                _logger.LogError("ST1");
                 foreach (var s in item)
                 {
+                    _logger.LogError("fsfsf");
                     products.Add(_context.Product.Where(x => x.Id == s.ProductId).FirstOrDefault());
                     _logger.LogInformation(s.ProductId.ToString());
                     var t = _context.Product.Where(x => x.Id == s.ProductId).FirstOrDefault();
@@ -408,24 +412,28 @@ namespace DeliveryEat_vue1.Server.Controllers
                     int count = _context.BasketItem.Where(x => x.ProductId == t.Id && x.BasketId == id).Count();
                     _logger.LogInformation(count.ToString());
                     int Total = t.Coast * count;
-                    _logger.LogInformation(Total.ToString());
+                    _logger.LogError(t.Coast.ToString());
                     Totals.Add(Total);
                 }
 
-
+                _logger.LogError("ST2");
 
                 foreach (var s in Totals)
                 {
                     CoastTotal += s;
+                    _logger.LogError(s.ToString());
 
                 }
-
+                _logger.LogError("ST3");
+                
 
                 return CoastTotal;
             }
             catch (Exception e)
             {
+                _logger.LogError(e.Message);
                 return 0;
+                
             }
         }
 
@@ -444,7 +452,23 @@ namespace DeliveryEat_vue1.Server.Controllers
             _logger.LogError(BID.ToString());
         }
 
-
+        [HttpGet]
+        [Route("GetBasketId")]
+        public JsonResult GetBasketId(string? sessionid,string? username)
+        {
+            if (sessionid != null)
+            {
+                var basketid = _context.Sessions.Where(x => x.ID == sessionid).FirstOrDefault();
+                if (_context.Sessions.Any(x => x.ID == sessionid)) return Json(basketid.Value);
+            }
+            else if(username != null)
+            {
+                var user = _context.Users.Where(x => x.Login == username).FirstOrDefault();
+                var basket = _context.UserBasket.OrderBy(x => x.Id).LastOrDefault(x => x.UserId == user.Id);
+                return Json(basket.BasketId);
+            }
+            return Json("");
+        }
 
     }
 }

@@ -1,11 +1,26 @@
 <template>
     <div class="large-6 cell">
         <div class="text-right" >
-            <span class="notification">
-                <img src="./cor.png" alt="" id="basket">
+            <span class="notification" v-if="gettersAuthData.role!=''">
+                {{gettersAuthData.role}}
+                <router-link v-if="gettersAuthData.role!=''" to="/basketuser" exact><img v-if="gettersAuthData.role!=''" src="./cor.png" alt="" id="basket"> </router-link>
+
+
+
+
                 <span class="badge">{{count}}</span>
             </span>
-            <a href="#" class="secondary button" id="Sigin">Войти</a>
+            <span class="notification" v-if="gettersAuthData.role==''">
+                {{gettersAuthData.role}}
+                <router-link  to="/basket" exact><img  src="./cor.png" alt="" id="basket"> </router-link>
+
+
+
+
+                <span class="badge">{{count}}</span>
+            </span>
+            <router-link to="/Login" v-if="!isAuth"><a class="secondary button" id="Sigin">Войти</a></router-link>
+            <a v-if="isAuth" class="secondary button" id="Sigin" @click="signout">Выйти</a>
 
         </div>
 
@@ -16,7 +31,11 @@
 
     import emitter from 'tiny-emitter/instance'
     import { ref } from 'vue'
-    const API_URL = "https://localhost:7084/"
+    import router from "@/router.js";
+
+    import axios from "axios";
+    const API_URL = "http://localhost:5000/"
+    import {mapGetters} from 'vuex';
     function getCookie(name) {
         let matches = document.cookie.match(new RegExp(
             "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
@@ -48,15 +67,15 @@
 
         document.cookie = updatedCookie;
     }
-    
+
     export default
         {
-           
+
             data() {
                 return {
 
                     count:0,
-                    
+                    isAuth:false,
 
 
                 }
@@ -77,7 +96,19 @@
                     }
 
                 },
+                async authget(){
+                    if(this.gettersAuthData.userName==""){
+                        this.isAuth=false;
+                    }
+                    else if(this.gettersAuthData.userName!=""){
+                        this.isAuth=true;
+                    }
+                },
+                signout(){
+                    localStorage.removeItem('access_token');
+                    location.reload();
 
+                }
 
 
 
@@ -85,17 +116,24 @@
 
 
             },
+
 
             created() {
                 this.refreshData();
+                this.authget();
                 this.timer = setInterval(this.refreshData, 10000);
+                this.timer = setInterval(this.authget, 1000);
             },
             mounted: function () {
                 this.refreshData();
-
+                this.authget();
 
             },
-
+            computed: {
+                ...mapGetters('auth', {
+                    gettersAuthData: 'getAuthData',
+                    getterLoginStatus:'getLoginStatus'
+                })},
 
         }
         </script>

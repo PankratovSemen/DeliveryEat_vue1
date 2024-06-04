@@ -1,6 +1,6 @@
 <script setup>
     /**
-  * теперь этот файл/поток будет кодироваться в UTF-8
+  * пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ UTF-8
   */
     import { ref } from 'vue'
     import Counter from './child/Counter.vue'
@@ -43,7 +43,7 @@
     <div class="grid-x grid-padding-x">
         <div class="cell medium-4 large-3" id="item1" v-for="(item,id) in item" :key="item.id">
 
-            <img src="../img/1.jpg" alt="Упс изображение не загрузилось" class="cardimage">
+            <img src="../img/1.jpg" alt="пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" class="cardimage">
             <div class="small-12">
                 <h1>{{item.title}}</h1>
                 <p>{{content.DescriptionLabel}}</p>
@@ -74,7 +74,7 @@
 
     import emitter from 'tiny-emitter/instance'
     import { ref } from 'vue'
-    const API_URL = "https://localhost:7084/"
+    const API_URL = "https://localhost:5000/"
     function getCookie(name) {
         let matches = document.cookie.match(new RegExp(
             "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
@@ -118,9 +118,9 @@
 
                     item: [],
                     content: {
-                        addBuyRU:'Добавить в корзину',
-                        DescriptionLabel:'Описание',
-                        CountLabel:'Количествоss',
+                        addBuyRU:'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+                        DescriptionLabel:'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+                        CountLabel:'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅss',
                     }
 
 

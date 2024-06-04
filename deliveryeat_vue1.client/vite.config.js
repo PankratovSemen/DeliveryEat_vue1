@@ -29,7 +29,6 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
         throw new Error("Could not create certificate.");
     }
 }
-
 const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}` :
     env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'https://localhost:7084';
 
@@ -50,9 +49,15 @@ export default defineConfig({
             }
         },
         port: 5173,
+        host:true,
         https: {
             key: fs.readFileSync(keyFilePath),
             cert: fs.readFileSync(certFilePath),
+        }
+    },
+    build:{
+        rollupOptions:{
+            external:['vuex']
         }
     }
 })

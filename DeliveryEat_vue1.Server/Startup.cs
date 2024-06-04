@@ -65,23 +65,27 @@ namespace DeliveryEat_vue1.Server
         }
         public void Configure(WebApplication app, IWebHostEnvironment env)
         {
-            app.UseCors(builder =>
+            /*app.UseCors(builder =>
             {
                 builder
-                    .WithOrigins("https://localhost:5173")
+                    .WithOrigins("https://192.168.0.100:8081")
                     .AllowAnyMethod()
                     .AllowAnyHeader();
 
-            });
+            });*/
+            app.UseCors(builder => builder
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowAnyOrigin()
+                );
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
+           
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
+            
            
             app.UseHttpsRedirection();
 

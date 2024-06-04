@@ -1,7 +1,10 @@
 <template>
+
 <div class="grid-container">
+    <h1>Панель управления заказами</h1>
     <div class="grid-x grid-padding-x">
       <div class="medium-10" v-for="(item,id) in orders" :key="item.id">
+
         <div v-if="gettersAuthData.role=='Кухонный работник'&& item.status=='Оплачен'">
             <h4>
                 Заказ №{{item.id}}
@@ -44,7 +47,7 @@ import CountPR from '@/components/child/CountProductBasket.vue'
 import Cancel from '@/components/child/CancelButtonOrder.vue'
 import StatusBTN from '@/components/child/ButtonStatusManager.vue'
 
-const API_URL = "https://localhost:7084/";
+const API_URL = "http://localhost:5000/";
 export default {
     name: "OrdersPanel",
 

@@ -1,4 +1,4 @@
-@DeliveryEat_vue1.Server_HostAddress = http://localhost:5190
+@DeliveryEat_vue1.Server_HostAddress = http://localhost:8080
 
 GET {{DeliveryEat_vue1.Server_HostAddress}}/weatherforecast/
 Accept: application/json

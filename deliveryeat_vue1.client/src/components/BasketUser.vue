@@ -25,9 +25,8 @@
 
     </div>
     <div class="grid-x grid-padding-x">
-
         <div class="cell large-12">
-            <button class="button">Оплатить</button>
+            <button class="button" @click="gotopay">Оплатить</button>
         </div>
     </div>
 
@@ -37,8 +36,9 @@
 import axios from "axios";
 import { mapGetters } from 'vuex'
 
-const API_URL = "https://localhost:7084/"
+const API_URL = "http://localhost:5000/"
 import CountPR from '@/components/child/CountProductUser.vue'
+import router from "@/router.js";
 
 
 export default
@@ -62,8 +62,8 @@ export default
                     CountLabel:'Количество',
                 },
                 countProduct:0,
-                username:'sdd'
-
+                username:'sdd',
+                basketid:0
 
             }
         },
@@ -93,8 +93,20 @@ export default
 
                     }
                 )
-            }
+            },
+            async getbasketid(){
+                axios.get(API_URL + "api/Basket/GetBasketId?username=" + this.gettersAuthData.userName).then(
+                    (response) => {
+                        const data = response.data;
+                        this.basketid = data;
 
+
+                    }
+                )
+            },
+            gotopay(){
+                router.push('/PayOrder/'+ this.basketid);
+            }
 
 
 
@@ -107,7 +119,7 @@ export default
         mounted: function () {
 
             this.refreshData();
-
+            this.getbasketid();
 
         },
 

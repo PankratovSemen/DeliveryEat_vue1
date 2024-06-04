@@ -74,7 +74,7 @@
 
     import emitter from 'tiny-emitter/instance'
     import { ref } from 'vue'
-    const API_URL = "https://localhost:7084/"
+    const API_URL = "http://localhost:5000/"
     function getCookie(name) {
         let matches = document.cookie.match(new RegExp(
             "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"

@@ -30,7 +30,7 @@ import axios from "axios";
 import {mapGetters} from "vuex";
 import CountPR from "@/components/child/CountProductBasket.vue";
 import StatusBTN from "@/components/child/ButtonStatusManager.vue";
-const API_URL = "https://localhost:7084/";
+const API_URL = "http://localhost:5000/";
 
 export default {
     name: "DashboardCourier",

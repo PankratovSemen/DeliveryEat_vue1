@@ -47,7 +47,7 @@
             </div>
         </div>
     </div>
-    <div class="grid-x grid-padding-x">
+    <div class="grid-x grid-padding-x" v-if="item.length>0">
         <div class="cell medium-8 large-8" id="item1" v-for="(item,id) in item" :key="item.id">
 
             <img :src="item.preview" alt="Упс изображение не загрузилось" class="cardimage">
@@ -72,14 +72,32 @@
 
 
     </div>
+    <br>
+    <div class="grid-container" v-if="item.length>0">
+        <div class="grid-y">
+            <div class="cell medium-5">
+                <p class="total">Итого:{{sum}}</p>
+            </div>
+        </div>
 
+    </div>
+    <div class="grid-x grid-padding-x" v-if="item.length>0">
+        <div class="cell large-12">
+            <button class="button" @click="gotopay">Оплатить</button>
+        </div>
+    </div>
 </template>
 
 <script>
 
     import emitter from 'tiny-emitter/instance'
     import { ref } from 'vue'
-    const API_URL = "https://localhost:7084/"
+    import BasketC from "@/components/child/Basket.vue";
+    import axios from "axios";
+    import router from "@/router.js";
+
+
+    const API_URL = "http://localhost:5000/"
     function getCookie(name) {
         let matches = document.cookie.match(new RegExp(
             "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
@@ -116,7 +134,7 @@
         {
             components: {
                 Counter,
-                Basket,
+
                 CountPR
             },
             data() {
@@ -128,7 +146,9 @@
                         DescriptionLabel:'Описание',
                         CountLabel:'Количество',
                     },
-                    countProduct:0
+                    countProduct:0,
+                    basketid:0,
+                    sum:0
 
 
                 }
@@ -161,6 +181,29 @@
                             }
                         )
                     }
+                },
+                async getbasketid(){
+                    axios.get(API_URL + "api/Basket/GetBasketId?sessionid=" + getCookie("session")).then(
+                        (response) => {
+                            const data = response.data;
+                            this.basketid = data;
+
+
+                        }
+                    )
+                },
+                async totalsum(){
+                    axios.get(API_URL + "api/Basket/api/BasketTotal?session=" + getCookie("session")).then(
+                        (response) => {
+                            const data = response.data;
+                            this.sum = data;
+
+
+                        }
+                    )
+                },
+                gotopay(){
+                    router.push('/PayOrder/'+ this.basketid);
                 }
 
 
@@ -174,10 +217,12 @@
             created() {
                 this.refreshData();
                 this.timer = setInterval(this.refreshData, 10000);
+                this.timer = setInterval(this.totalsum, 10000);
             },
             mounted: function () {
                 this.refreshData();
-
+                this.getbasketid();
+                this.totalsum();
 
             },
 
@@ -189,3 +234,9 @@
 
 
 </script>
+<style>
+.total{
+    font-size:35px;
+    font-family: "Segoe UI Black";
+}
+</style>

@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "test:dev": "http-server dist -p 8081 -c 1 --push-state",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",

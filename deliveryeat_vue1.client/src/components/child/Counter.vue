@@ -29,7 +29,7 @@
 
     <div class="small-4 cell">
 
-        <input type="text" v-model="counts.value" class="small-2" id="counts" />
+        <input type="number" v-model="counts.value" class="small-2" id="counts" @input="$emit('change-count', $event.target.value)"/>
 
 
 

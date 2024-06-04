@@ -85,6 +85,22 @@ const routes = [
         meta: {
             requiresAuth: false
         }
+    },
+    {
+        name: 'CreateUser',
+        path: '/Users/Create',
+        component: import('@/components/CreateUser.vue'),
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        name: 'AddProduct',
+        path: '/Products/Add',
+        component: import('@/components/AddProduct.vue'),
+        meta: {
+            requiresAuth: true
+        }
     }
 
 ];
@@ -108,7 +124,17 @@ routeConfig.beforeEach((to,from, next) => {
             store.commit('auth/saveTokenData', data);
         }
     }
-    const auth = store.getters["auth/isTokenActive"];
+
+    let auth = false;
+    if(localStorage.getItem("access_token"))
+    {
+        auth=true;
+    }
+    else if(!localStorage.getItem("access_token")){
+        auth=false
+    }
+
+
 
     if (to.fullPath == "/") {
         return next();

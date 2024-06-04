@@ -209,7 +209,7 @@ namespace DeliveryEat_vue1.Server.Controllers
             var user = context.Users.Where(x=>x.Login==EncryptionHash.Encrypt(login) && x.Password==EncryptionHash.Encrypt(password)).FirstOrDefault();
                 if (user != null)
                 {
-                    int roleId = context.RolesToUSR.Where(x=>x.UserId==user.Id).FirstOrDefault().Id;
+                    int roleId = context.RolesToUSR.Where(x=>x.UserId==user.Id).FirstOrDefault().RoleId;
                     var roled = context.Roles.Where(x=>x.Id==roleId).FirstOrDefault();
                     var claims = new List<Claim>
                     {

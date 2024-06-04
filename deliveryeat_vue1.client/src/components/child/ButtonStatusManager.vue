@@ -20,7 +20,7 @@
 import axios from "axios";
 import {useVuelidate} from "@vuelidate/core";
 import {integer, required} from "@vuelidate/validators";
-const API_URL = 'https://localhost:7084/';
+const API_URL = 'http://localhost:5000/';
 export default {
     setup () {
         return {
